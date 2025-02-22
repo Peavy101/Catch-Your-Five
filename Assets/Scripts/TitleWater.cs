@@ -7,16 +7,17 @@ public class TitleWater : MonoBehaviour
     public float amplitude = 0.5f; // Height of the bobbing motion
     public float frequency = 1f;   // Speed of the bobbing motion
 
-    private Vector3 startPos;
+    private float startPosY; // Store only the Y position
 
     void Start()
     {
-        startPos = transform.position;
+        startPosY = transform.position.y; // Store only the Y coordinate
     }
 
     void Update()
     {
         float yOffset = Mathf.Sin(Time.time * frequency) * amplitude;
-        transform.position = startPos + new Vector3(0, yOffset, 0);
+        transform.position = new Vector3(transform.position.x, startPosY + yOffset, transform.position.z);
     }
 }
+
