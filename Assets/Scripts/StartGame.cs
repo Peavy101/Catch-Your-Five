@@ -30,7 +30,6 @@ public class StartGame : MonoBehaviour
         titleScreenSounds.Play();
         yield return new WaitForSeconds(0.5f);
         fisherman.SetActive(true);
-        FindObjectOfType<TitleTextFade>().FadeOut();
 
         yield return new WaitForSeconds(0.5f);
 
@@ -76,6 +75,7 @@ public class StartGame : MonoBehaviour
         yield return new WaitForSeconds(2f);
 
         boatRb.velocity = new Vector2(-1.1f, 0f);
+        FindObjectOfType<TitleTextFade>().FadeOut();
     }
 }
 
