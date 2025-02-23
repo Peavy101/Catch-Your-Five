@@ -5,17 +5,34 @@ using UnityEngine;
 public class Fish : MonoBehaviour
 {
     private int timeTillNextAction = 1;
-    private float speedMultiplier = 1.5f;
-    private int direction;
-    private int previousDirection = 1;
+    private float speedMultiplier = 1f;
+    private int direction = -1;
+    private int previousDirection = -1;
     Rigidbody2D rb;
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        ResizeBasedOnPosition();
         SetRandomVariables();
-        previousDirection = direction;
+        if (direction > 0)
+        {
+            previousDirection = -1;
+        }
         StartCoroutine(FishBehaviour());
+    }
+
+    private void ResizeBasedOnPosition()
+    {
+        float scaleFactor = Mathf.Abs(transform.position.y);  // Get the absolute value of Y to avoid negative scale
+        float maxScale = 5f;  // Set the maximum size the fish can reach
+        float minScale = 1f;  // Set the minimum size the fish can reach
+
+        // Calculate scale based on Y position (scaleFactor goes up as Y position goes down)
+        float scale = Mathf.Lerp(minScale, maxScale, scaleFactor / 10f);  // Adjust "10f" for more/less sensitivity
+
+        // Apply the scale only to the X and Y axis, not Z (unless needed)
+        transform.localScale = new Vector3(scale, scale, 1f);  // Adjust Z if necessary
     }
 
     // Store the previous direction, assuming initial direction is 1 (right)
@@ -50,12 +67,7 @@ public class Fish : MonoBehaviour
     private void SetRandomVariables()
     {
         direction = Random.Range(0, 2) == 0 ? -1 : 1;
-        speedMultiplier = Random.Range(1, 3);
+        speedMultiplier = Random.Range(0.5f, 1.5f);
         timeTillNextAction = Random.Range(1, 4);
-    }
-
-    private void HandleDirection()
-    {
-
     }
 }
