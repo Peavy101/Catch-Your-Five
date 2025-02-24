@@ -38,7 +38,6 @@ public class Fish : MonoBehaviour
     // Store the previous direction, assuming initial direction is 1 (right)
     private IEnumerator FishBehaviour()
     {
-        Debug.Log("FishBehaviour is being called...");
         yield return new WaitForSeconds(timeTillNextAction);
 
         // Check if the direction has changed
@@ -54,7 +53,6 @@ public class Fish : MonoBehaviour
 
         // Update the velocity with the current direction and speed multiplier
         rb.velocity = new Vector2((1f * direction * speedMultiplier), rb.velocity.y);
-        Debug.Log(direction + " " + speedMultiplier);
         previousDirection = direction;
 
         // Set random variables for the next action
