@@ -1940,6 +1940,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3685427215fd8fe4585ae2989f63104d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  OverworldCam: {fileID: 655005501}
+  Objects: []
 --- !u!1 &2112737604
 GameObject:
   m_ObjectHideFlags: 0

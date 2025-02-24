@@ -4,37 +4,22 @@ using UnityEngine;
 
 public class BirdFlock : MonoBehaviour
 {
-    static public GameObject Flock;
-    int Direction = 0; // 1 -> eastwards, -1 -> westwards
-    float Velocity;
+    public int Direction = 0; // 1 -> eastwards, -1 -> westwards   
+    public float Speed;
 
-    public BirdFlock(Vector3 Position, int Direction)
+    public BirdFlock(){}
+
+    public void Start()
     {
-        Instantiate(Flock);
-
-        this.Flock.SetActive(true);
-
-        this.Direction = Direction;
-        this.Flock.transform.position = Position;
-
         // 1 = Spawn left fly right, -1 = spawn right fly left
-        this.Velocity = this.Direction * Random.Range(0.0f, 1.0f);
-    }
-
-
-    void FlockLogic()
-    {
-        Flock.transform.position = new Vector3(Flock.transform.position.x + Velocity, Flock.transform.position.y, Flock.transform.position.z);
-        OverworldLogic Overworld = GameObject.FindObjectOfType<OverworldLogic>();
-        Overworld.HandleDespawn(Flock);
+        Direction = Random.Range(0, 2) * 2 - 1;
+        Speed = Direction * Random.Range(0.0f, 1.0f);
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Flock.activeSelf)
-        {
-            FlockLogic();
-        }
+        Vector3 FlockTranslation = new Vector3(Direction * Speed * Time.deltaTime, 0, 0);
+        transform.Translate(FlockTranslation);
     }
 }
