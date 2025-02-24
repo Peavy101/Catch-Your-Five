@@ -4,14 +4,8 @@ using UnityEngine;
 
 public class OverworldLogic : MonoBehaviour
 {
-    public GameObject Flock;
-    public Camera camera; // Reference to the camera
+    public Camera OverworldCam; // Reference to the camera
     public GameObject[] Objects; // Objects to check for leaving the camera bounds
-
-    void SeagullFlyby()
-    {
-        HandleDespawn(Flock);
-    }
 
     // Start is called before the first frame update
     void Start()
@@ -19,10 +13,33 @@ public class OverworldLogic : MonoBehaviour
 
     }
 
-    void HandleDespawn(GameObject Object)
+    void SpawnFlock()
     {
-        Camera OverworldCam = Camera.main;
+        Vector3 TLP = OverworldCam.ViewportToWorldPoint(new Vector3(0, 1, OverworldCam.nearClipPlane)); // Top-left world point
+        Vector3 BRP = OverworldCam.ViewportToWorldPoint(new Vector3(1, 0, OverworldCam.nearClipPlane)); // Bottom-right world point
 
+        float CamHeight = TLP.y - BRP.y;
+        int Direction = Random.Range(0, 2) * 2 - 1;
+        Vector3 SpawnPoint;
+
+        BirdFlock Flock;
+
+        if (Direction == 1)
+        {
+            SpawnPoint = new Vector3(TLP.x, BRP.y + 0.75f * CamHeight, TLP.z);
+            Flock = new BirdFlock(SpawnPoint, Direction);
+            Objects.append(BirdFlock.Flock);
+        }
+        else if (Direction == -1)
+        {
+            SpawnPoint = new Vector3(BRP.x, BRP.y + 0.75f * CamHeight, TLP.z);
+            Flock = new BirdFlock(SpawnPoint, Direction);
+            Objects.append(BirdFlock.Flock);
+        }
+    }
+
+    public void HandleDespawn(GameObject Object)
+    {
         Vector3 TLP = OverworldCam.ViewportToWorldPoint(new Vector3(0, 1, OverworldCam.nearClipPlane)); // Top-left world point
         Vector3 BRP = OverworldCam.ViewportToWorldPoint(new Vector3(1, 0, OverworldCam.nearClipPlane)); // Bottom-right world point
 
