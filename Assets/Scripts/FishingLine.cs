@@ -26,7 +26,7 @@ public class FishingLine : MonoBehaviour
         }
         if (Input.GetKey(KeyCode.LeftArrow) && left)
         {
-            float newHeight = Mathf.Max(transform.localScale.y - stretchSpeed * Time.deltaTime * 2, minHeight);
+            float newHeight = Mathf.Max(transform.localScale.y - stretchSpeed * Time.deltaTime * 4, minHeight);
             float heightDifference = transform.localScale.y - newHeight;
             transform.localScale = new Vector3(originalScale.x, newHeight, originalScale.z);
             transform.position += new Vector3(0, heightDifference / 2, 0); // Moves only upward
@@ -34,12 +34,13 @@ public class FishingLine : MonoBehaviour
         }
         if (Input.GetKey(KeyCode.RightArrow) && !left)
         {
-            float newHeight = Mathf.Max(transform.localScale.y - stretchSpeed * Time.deltaTime * 2, minHeight);
+            float newHeight = Mathf.Max(transform.localScale.y - stretchSpeed * Time.deltaTime * 4, minHeight);
             float heightDifference = transform.localScale.y - newHeight;
             transform.localScale = new Vector3(originalScale.x, newHeight, originalScale.z);
             transform.position += new Vector3(0, heightDifference / 2, 0); // Moves only upward
             left = true;
         }
+        UpdateLowestPoint();
         // else if (Input.GetKey(KeyCode.UpArrow)) // Optional: retracting the line
         // {
         //     float newHeight = Mathf.Max(transform.localScale.y - stretchSpeed * Time.deltaTime, minHeight);
@@ -48,4 +49,13 @@ public class FishingLine : MonoBehaviour
         //     transform.position += new Vector3(0, heightDifference / 2, 0); // Moves only upward
         // }
     }
+
+    // Function to get the lowest point of the fishing line
+    void UpdateLowestPoint()
+    {
+        // Get the lowest Y coordinate by adjusting the position based on the height
+        float lowestY = transform.position.y - transform.localScale.y / 2f;
+        FindObjectOfType<Hook>().MoveHook(lowestY);
+    }
+
 }
