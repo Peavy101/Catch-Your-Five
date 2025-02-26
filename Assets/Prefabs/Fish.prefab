@@ -99,6 +99,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc58dfd482bdc4a4e97e6ba6ab1e12bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  wiggleStrength: 0.1
+  pullStrength: 1.5
+  struggleSpeed: 3
 --- !u!50 &139757542476610698
 Rigidbody2D:
   serializedVersion: 4
@@ -158,6 +161,6 @@ CircleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.01, y: 0.01}
+  m_Offset: {x: -0.00496924, y: 0.012515374}
   serializedVersion: 2
-  m_Radius: 0.04
+  m_Radius: 0.0676692
