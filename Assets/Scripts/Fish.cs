@@ -7,15 +7,20 @@ public class Fish : MonoBehaviour
     private bool isHooked = false;
     private FishingLine fishingLine;
 
+    public GameObject hook;  // Reference to the hook
     public float wiggleStrength = 0.1f; // How much the fish moves side to side when struggling
     public float pullStrength = 1.5f; // How hard the fish pulls down
     public float struggleSpeed = 3f; // How fast it wiggles when hooked
+    public float moveSpeed = 3f;  // Speed at which the fish moves towards the hook
 
     private Vector3 initialScale;
 
     void Start()
     {
+        hook = GameObject.FindWithTag("Hook"); // Find the hook
         rb = GetComponent<Rigidbody2D>();
+        rb.constraints = RigidbodyConstraints2D.FreezeRotation;
+
 
         // Base scale influenced by Y position (lower fish = bigger)
         float baseScale = Mathf.Clamp(1.5f - transform.position.y * 0.1f, 0.5f, 1.5f);
@@ -32,39 +37,49 @@ public class Fish : MonoBehaviour
         StartCoroutine(FishBehaviour());
     }
 
-
     void Update()
     {
         if (isHooked)
         {
-            PullLineDown();
-            Wriggle();
+            MoveToHook();  // Move towards the hook
+            Wriggle();  // Apply struggling wiggle when hooked
         }
     }
 
-    private void PullLineDown()
+    private void MoveToHook()
     {
-        // Fish applies downward force to resist being reeled in
-        fishingLine.ApplyDownwardForce(pullStrength * Time.deltaTime);
+        // Move the fish towards the hook position
+        if (hook != null)
+        {
+            // Move towards the hook
+            transform.position = Vector3.MoveTowards(transform.position, hook.transform.position, moveSpeed * Time.deltaTime);
+        }
     }
 
     private void Wriggle()
     {
-        // Makes the fish wiggle side to side while hooked
-        transform.position += new Vector3(Mathf.Sin(Time.time * struggleSpeed) * wiggleStrength * Time.deltaTime, 0, 0);
+        // Apply rotation struggle effect (fish tilts left and right)
+        float rotationAmount = Mathf.Sin(Time.time * struggleSpeed) * 15f;
+        transform.rotation = Quaternion.Euler(0, 0, rotationAmount);
     }
+
+
+
 
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("Hook") && !isHooked)
         {
             isHooked = true;
-            FindObjectOfType<FishingLine>().HookFish(1f); // Hook the fish
-            fishingLine = other.GetComponentInParent<FishingLine>(); // Get reference to FishingLine
+            fishingLine = GameObject.FindWithTag("FishingLine").GetComponent<FishingLine>(); // Find the fishing line
+            fishingLine.HookFish(1f); // Hook the fish
+
             rb.velocity = Vector2.zero; // Stop movement when caught
-            rb.isKinematic = true; // Prevents physics from affecting fish
+            rb.isKinematic = false; // Allow physics again
+            rb.constraints = RigidbodyConstraints2D.None; // Unlock Z rotation for struggling effect
         }
     }
+
 
     private IEnumerator FishBehaviour()
     {
